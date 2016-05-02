@@ -171,3 +171,7 @@ which is used by the client to let the server initiate an MTU exchange as follow
    at the time of querying the characteristic). The BLE client could
    then do the math to convert it into an absolute time.
 
+ - Flow control: the TNC could perform flow-control by delaying the *write response* for each
+   outgoing AX.25 packet until the packet has been transmitted OTA. That would allow the host to
+   have very fine-grained feedback about the timing of transmissions, however it would prevent the
+   back-to-back transmission of multiple packets queued in the TNC.
