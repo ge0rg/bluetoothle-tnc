@@ -32,7 +32,7 @@ reasons:
 Bluetooth LE GATT is a client-driven protocol. All interactions are initiated by the LE client (also
 called *central*, most probably a smartphone), and the LE server (*peripheral*, the TNC) is the
 responder.  The only means for the LE server to initiate a transmission is by means of the limited
-*notify characteristic* mechanism, to which the client must be subscribed.
+*notify characteristic* mechanism, to which the client must explicitly subscribe.
 
 The basic usage pattern for the TNC is as follows:
 
@@ -78,8 +78,13 @@ While the BLE standard allows mixing *prepare-write*s to different characteristi
 protocol simplicity this protocol limits batch writes to a single characteristic, and enforces
 consecutiveness of the individual fragments.
 
-After receiving the BLE *write* or *execute-write*, the TNC extracts the AX.25 packet from the KISS
-frame obtained and sends it via RF.
+After receiving the BLE *write* or *execute-write*, the TNC processes the KISS frame according to
+its frame type. AX.25 packets are excracted and sent via RF, control frames are processed by the
+TNC.
+
+If the TNC's KISS transmission buffer is filled up, it can perform BLE-level flow control by
+delaying the BLE *write response* acknowledgement to the client until sufficient buffer space is
+freed up by processing/transmitting the frame obtained from the client.
 
 *Optional: allow multiple KISS frames to be sent together (up to 512 bytes) by putting them
 back-to-back into the characteristic.*
